@@ -1,0 +1,27 @@
+** Superclasses and Subclasses **
+eg. Staff/Manager has a superclass/subclass relationship. "Manager IS-A member of staff."
+
+ # Attribute Inheritance
+   Type hierarchies are known by a variety of names, including:
+ 1.specialization hierarchy (for example, Manager is a specialization of Staff )
+ 2. generalization hierarchy (for example, Staff is a generalization of Manager )
+ 3. IS-A hierarchy(for example, Manager IS-A (member of) Staff )
+ 
+ # Constraints on Specialization/Generalization
+   There are two constraints that may apply to a specialization/generalization called participation constraints and disjoint constraints.
+ 1.Participation constraints:
+   May be mandatory or optional.
+   Determines whether every member in the superclass must participate as a member of a subclass.
+ 2.Disjoint constraints:
+   Describes the relationship between members of the subclasses and indicates whether it is possible for a member of a superclass to be a member of one, or more than one, subclass.
+ Or - If the subclasses are disjoint, then an entity occurrence can be a member of only one of the subclasses. 
+ And -If subclasses of a specialization/generalization are not disjoint (called nondisjoint), then an entity occurrence may be a member of more than one subclass. 
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+** Aggregation **
+Represents a “has-a” or “is-part-of” relationship between entity types, where one represents the “whole” and the other the “part.”
+ 
+** Composition **
+A specific form of aggregation that represents an associationbetween entities, where there is a strong ownership and coincidental lifetime between the “whole” and the “part.”
+  eg. As a composition, this emphasizes the fact that an Advert entity (the “part”) belongs to exactly one Newspaper entity (the “whole”)
+  
