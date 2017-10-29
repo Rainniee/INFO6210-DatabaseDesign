@@ -1,0 +1,83 @@
+** Information System **
+The resources that enable the collection, management, control, and dissemination of information throughout an organization.
+
+1. A computer-based information system includes:
+   database, database software, application software, computer hardware, and personnel using and developing the system.
+
+2. Stages in the lifecycle of an information system include: 
+   planning, requirements collection and analysis, design, prototyping, implementation, testing, conversion, and operational maintenance.
+
+## Stages of the database system development lifecycle are 
+   NOT strictly sequential BUT involve some amount of repetition of previous stages through feedback loops.
+
+** System Definition **
+Describes the scope and boundaries of the database system and the major user views.
+
+** User Views **
+Defines what is required of a database system from the perspective of a particular job role (such as Manager or Supervisor) 
+or enterprise application area (such as marketing, personnel, or stock control).
+
+## Requirements Collection and Analysis ##
+1. Include, for example, Structured Analysis and Design (SAD) techniques, Data Flow Diagrams (DFD) and Unified Modeling Language (UML).
+
+2. Three main approaches to managing the requirements of a database system with multiple user views:
+  • the centralized approach;
+  • the view integration approach;
+  • a combination of both approaches.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+** Database Design **
+The process of creating a design that will support the enterprise’s mission statement and mission objectives for the required database system.
+
+Approaches to Database Design
+  • Bottom-up approach: 
+    begins at the fundamental level of attributes (that is, properties of entities and relationships.
+  # Appropriate for the design of simple databases with a relatively small number of attributes.
+  # difficult to establish all the functional dependencies between the attributes of complex database.
+    
+  • Top-down approach: 
+    illustrated using the concepts of the Entity-Relationship (ER) model,
+    beginning with the identification of entities and relationships between the entities.
+
+** Data Modeling **
+Building a data model requires answering questions about entities, relationships, and attributes.
+1. Two main purposes of data modeling:
+  • Assist in the understanding of theCmeaning (semantics) of the data.
+  • Facilitate communication about the information requirements.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+** Phases of Database Design **
+Three main phases: conceptual, logical, and physical design.
+
+1. Conceptual database design
+   The process of constructing a model of the data used in an enterprise, independent of all physical considerations.
+## Entirely independent of implementation details such as the target DBMS software, programming languages or hardware platfor ##
+
+2. Logical database design
+   The process of constructing a model of the data used in an enterprise based on a specific data model
+   But independent of a particular DBMS and other physical considerations.
+## know that the DBMS is, for example, relational, network, hierarchical, or object-oriented. 
+## However, we ignore any other aspects or any physical details, such as storage structures or indexes.
+## The technique of normalization is used to test the correctness of a logical data model.
+
+3. Physical database design
+   The process of producing a description of the implementation of the database on secondary storage; 
+   It describes the base relations, file organizations, and indexes used;
+   To achieve efficient access to the data, and any associated integrity constraints and security measures.
+## During which the designer decides how the database is to be implemented.
+## eg. creating a set of relational tables and the constraints on these tables;
+       identifying the specific storage structures and access methods for the data;
+       designing security protection for the system.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+** Transactions **
+• Retrieval transactions
+  eg. operation to search for and display the details of a property (given the property number)
+• Update transactions
+  eg. insert new records, delete old records, or modify existing records in the database.
+• Mixed transactions 
+  eg. operation to search for and display the details of a property and then update the value of the monthly rent.
+
+** Computer-Aided Software engineering (CASE) **
+Applies to any tool that supports software development and permits the database system development activities to be carried out as efficiently and effectively as possible.
+CASE tools may be divided into three categories: upper-CASE, lower-CASE, and integrated-CASE.
