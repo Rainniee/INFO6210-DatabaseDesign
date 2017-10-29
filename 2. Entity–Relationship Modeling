@@ -1,0 +1,73 @@
+** Entity Types **
+A group of objects with the same properties, which are identified by the enterprise as having an independent existence.
+
+** Relationship Types **
+A set of meaningful associations among entity types. 
+
+** Degree of Relationship Type **
+The number of participating entity types in a relationship. 
+1. A relationship of degree two is called binary.
+   An example of a binary relationship is the Has relationship.
+2. A relationship of degree three is called ternary. 
+   An example of a ternary relationship is Registers with three participating entity types: Staff , Branch , and Client.
+
+** Recursive Relationship **
+A relationship type in which the same entity type participates more than once in different roles.
+  eg 1. Supervises, which represents an association of staff with a Supervisor where the Supervisor is also a member of staff.  
+  eg 2. Staff and Branch entity types are associated through two distinct relationships called Manages and Has.
+  
+** Attributes **
+1. A property of an entity or a relationship type. 
+2. Each attribute is associated with a set of values called a domain.
+  eg. Simple and Composite Attributes, Single-valued and Multi-valued Attributes, Derived Attributes
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+** Candidate key **
+The minimal set of attributes that uniquely identifies each occurrence of an entity type.
+
+** Primary key **
+The candidate key that is selected to uniquely identify each occurrence of an entity type.
+
+** Composite key **
+A candidate key that consists of two or more attributes.
+  eg. Many properties are advertised in many newspapers on a given date. 
+      Thus, the Advert entity type has a composite primary key made up of the propertyNo , newspaperName , and dateAdvert attributes.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+** Strong Entity **
+An entity type that is not existence-dependent on some other entity type.
+  eg. Figure include the Staff , Branch , PropertyForRent , and Client entities
+      a strong entity type is that each entity occurrence is uniquely identifiable using the primary key attribute(s) of that entity type
+
+** Weak Entity **
+An entity type that is existence-dependent on some other entity type.
+  eg 1. the Preference entity can be described as having existence dependency for the Client entity, which is referred to as being the owner entity.
+     2. also referred to as child, dependent, or subordinate entities and strong entity types as parent, owner, or dominant entities.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+** Structural Constraints **
+1. Multiplicity
+   Multiplicity constrains the way that entities are related.
+   The number (or range) of possible occurrences of an entity type that may relate to a single occurrence of an associated entity type through a particular relationship.
+## Binary relationships are generally referred to as being:
+ • one-to-one (1:1): a member of staff manages a branch (1:1)
+&& a member of staff can manage zero or one branch and each branch is managed by one member of staff.
+ • one-to-many (1:*): a member of staff oversees properties for rent (1:*)
+&& a member of staff can oversee zero or more properties for rent and a property for rent is overseen by zero or one member of staff.
+ • many-to-many (*:*): newspapers advertise properties for rent (*:*)
+&& one newspaper advertises one or more properties for rent and one property for rent is advertised in zero or more newspapers.
+
+   Multiplicity actually consists of two separate constraints known as cardinality and participation.
+## 1) Cardinality: 
+   Describes the maximum number of possible relationship occurrences for an entity participating in a given relationship type.
+   The cardinality of a binary relationship is what we previously referred to as a one-to-one (1:1), one-to-many (1:*), and many-to-many (*:*). 
+## 2) Participation:
+   Determines whether all or only some entity occurrences participate in a relationship.
+   Involved in a particular relationship (referred to as mandatory participation) or only some (referred to as optional participation).
+   Optional participation is represented by the minimum value on the opposite side of the relationship.
+   Optional participation is represented as a minimum value of 0, and mandatory participation is shown as a minimum value of 1.
+   
+-------------------------------------------------------------------------------------------------------------------------------------------------
+** Problems with ER Models **
+1. Fan trap exists where a model represents a relationship between entity types, but the pathway between certain entity occurrences is ambiguous.
+2. Chasm trap exists where a model suggests the existence of a relationship between entity types, but the pathway does not exist between certain entity occurrences.
