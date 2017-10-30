@@ -1,0 +1,77 @@
+** Terminology **
+
+   Relational Data Structure
+1. Relation: is a table with columns and rows.
+             |        A relation is represented as a two-dimensional table in which the rows of the table 
+             |        correspond to individual records and the table columns correspond to attributes
+2. Attribute: is a named column of a relation.
+
+3. Domain: is the set of allowable values for one or more attributes.
+   Every attribute in a relation is defined on a domain.
+   
+4. Tuple: is a row of a relation.
+   Elements of a relation are the rows or tuples in the table.
+   
+5. Degree of a relation: is the number of attributes it contains.
+   A relation with two attributes is called binary.
+   
+6. cardinality of a relation: is the number of tuples it contains.
+
+7. Relational database: A collection of normalized relations with distinct relation names.
+   
+   Alternative terminology
+1. Relation -- Table --  File
+2. Tuple -- Row -- Record
+3. Attribute -- Column -- Field
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+** Database Relations **
+   A named relation defined by a set of attribute and domain name pairs.
+eg. {( branchNo : B005, street : 22 Deer Rd, city : London, postcode : SW1 4EH)}  -- relation instance
+
+** Relational database schema 
+   A set of relation schemas, each with a distinct name.
+ ## 
+ A relation that satisfies this property is said to be normalized or in first normal form.
+ 
+** Relational Keys **
+1. There may be several candidate keys for a relation.
+2. When a key consists of more than one attribute, we call it a composite key.
+
+## Primary key: 
+   The candidate key that is selected to identify tuples uniquely within the relation.
+## Foreign key:
+   An attribute, or set of attributes, within one relation that matches the candidate key of some (possibly the same) relation.
+eg. In the Staff relation, branchNo is a foreign key
+               branchNo   ---   in the Staff relation 
+                  |     targets 
+               branchNo   ---   the primary key attribute in the home relation --- Branch
+  
+--------------------------------------------------------------------------------------------------------------------------------------------
+** Integrity Constraints **
+Two important integrity rules: referential integrity & multiplicity
+
+** NULLS **
+   Represents a value for an attribute that is currently unknown or is not applicable for this tuple.
+   
+** Entity Integrity **
+   In a base relation, no attribute of a primary key can be null.
+
+** Referential Integrity **
+   If a foreign key exists in a relation:
+  either the foreign key value must match a candidate key value of some tuple in its home relation;
+  or the foreign key value must be wholly null.
+  
+** General Constraints **
+   Additional rules specified by the users or database administrators of a database that define or constrain some aspect of the enterprise.
+   
+--------------------------------------------------------------------------------------------------------------------------------------------
+** Views **
+1. Views are dynamic:
+   changes made to the base relations that affect the view are immediately reflected in the view. 
+2. Purpose of Views:
+   ## provides a powerful and flexible security mechanism by hiding parts of the database from certain users.
+   ## permits users to access data in a way that is customized to their needs.
+   ## simplify complex operations on the base relations.
+3. Not all views are updatable
+   
