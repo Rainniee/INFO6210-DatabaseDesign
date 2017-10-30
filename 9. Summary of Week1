@@ -1,0 +1,40 @@
+** Database System History **
+• ‘File Cabinet’ Database (paper systems)   • Hierarchical Database
+• Network Database                          • Relational Database
+• Object Database                           • NoSQL
+
+## Object Database 
+1. Provided Object Oriented features, such as encapsulation and polymorphism
+2. Suffered due to lack of standardization
+
+## NoSQL
+1. Umbrella term for all databases and data stores that don’t follow strict RDBMS principles 
+2. Relate to large data sets accessed and manipulated on Web scale
+3. Represents collection of diverse, and sometimes related, concepts about data storage and manipulation
+4. Characteristics
+   Non-Relational Database                   Big Data
+   Distributed Storage & Processing          Open Source
+   Less expensive hardware                   Batch Processing（Google Map Reduce）
+   Interactive and Stream Processing （Apache Tez Framework，Apache Spark，Facebook Presto）
+   Denormalization at ingestion to speed up query
+   Append instead of update to improve performance
+   Schema-agnostic
+5. NoSQL Database Use Cases
+   Key‐value stores
+     Simple binary values, lists, maps, and strings
+   Columnar stores
+    Related information values can be grouped in column families
+     (support very wide tables but not relationships between tables)
+   Document stores
+    Highly complex parent‐child hierarchal structures
+     (keep JSON and/or XML hierarchical structures)
+   Triple and Graph stores
+    A web of interrelated information 
+
+## RDBMS vs NoSQL
+Denormalizing tables, dropping constraints, and relaxing transactional guarantee can help an RDBMS scale 
+But after these modifications, an RDBMS starts resembling a NoSQL product
+
+## Three V’s of Big Data
+• Volume     • Variety    • Velocity
+
