@@ -1,0 +1,168 @@
+** How does database fit in the overall application infrastructure?  
+                ■             --->                 ■                 --->                 ■
+         Database Server      <---         Application Server        <---         Web Front-End Server
+
+----------------------------------Stages of database development lifecycle----------------------------------------------------------------------
+** Database Design **
+1. Three phases of database design:
+ • Conceptual database design       • Logical database design      • Physical database design
+   
+2. Main approaches include:
+ • Top-down
+   # Identify high-level entities   # Gather required attributes and place them in entities   # Fine tune
+ • Bottom-up
+   # Gather required attributes     # Group attributes into entities                          # Fine tune
+   
+** Application Design **
+ • Design of application that uses and processes the database
+ • Database design and application design are parallel activities
+ 
+ 
+---------------------------------Software tools to facilitate database development---------------------------------------------------------
+** CASE Tools **
+ • Features provided by CASE tools include:
+   # Data dictionary      # Support data analysis     #Develop conceptual, logical, and physical models
+ • Provide following benefits:
+   # Standardization       # Integration        # Consistency       # Automation
+ • Forward Engineering
+   # Generate code to implement database based on design
+ • Reverse Engineering
+   # Read an existing database and create ERD
+   
+---------------------------------------------------SQL Concepts----------------------------------------------------------------------------
+** Role of SQL Commands **
+                       Front End Programs             SQL ANSI                  Relational Database Server
+                              ■             <--------------------------->                    ■ 
+                         Application              Standard Commands                      SQL Server
+                            Excel                                                          Oracle
+                            Access                                                         Access
+                            SSMS                                                           MySQL         
+  • SQL ANSI standard commands are sent from the front end to the back end server
+  • Back end server:
+    # Parses command to determine action to be taken     # Completes the action     # Returns results
+  • All relational databases have their own proprietary SQL commands
+  • TSQL: Transact SQL 
+          ANSI Standard SQL + MS SQL Server Proprietary Commands
+   
+** SQL Command Categories **
+  • DML: Data Manipulation Language -– Selects and alters data
+  • DDL: Data Definition Language -– Creates, alters, and drops database objects
+  • DCL: Data Control Language -– Controls users’ permissions
+eg.
+  1.DML: SELECT, INSERT, UPDATE, DELETE
+  2.DDL: CREATE TABLE, ALTER TABLE, DROP TABLE, CREATE VIEW, ALTER VIEW, DROP VIEW
+  3.DCL: GRANT, REVOKE, DENY
+
+---------------------------------------------------SELECT (Transact-SQL)----------------------------------------------------------------------------
+                                          SELECT select_list [ INTO new_table ]
+                                          FROM [ table_source ]
+                                          WHERE [ search_condition ]
+                                          GROUP BY [ group_by_expression ]
+                                          HAVING [ search_condition ]
+                                          ORDER BY [ order_expression [ ASC | DESC ] ]
+
+** WHERE **
+• After the FROM clause in a SELECT command
+• Filters rows
+
+-------------------------------------------------------Lab Example-------------------------------------------------------------------------
+ ## In Production.Product 
+    Production is the schema name  >>>  Schema is used for organizing database objects or controlling access
+    Product is the table name.
+
+** Count number of distinct values in the CreditCardID column
+   SELECT COUNT(DISTINCT CreditCardID) "Unique Credit Cards"
+   FROM Sales.SalesOrderHeader;
+
+** Demo many different aggregate functions and different ways to specify column alias names
+   SELECT MIN(OrderQty) AS [Minimum Quantity],
+          MAX(OrderQty) AS [Maximum Quantity],
+          [Total] = SUM(OrderQty),
+          AVG(OrderQty) AverageQuantity,    -- AverageQuantity is alias
+          SUM(OrderQty)/COUNT(OrderQty),    -- No column heading, no alias
+          COUNT(*) AS "Count"
+    FROM Sales.SalesOrderDetail
+    WHERE OrderQty BETWEEN 30 AND 50;
+
+## The COUNT function is commonly used together with GROUP BY
+##  When the COUNT is used in the SELECT clause, all other columns of the SELECT clause must be contained in the GROUP BY clause.
+    If this syntax rule is not met, we’ll get an error. 
+  SELECT CustomerID, AccountNumber, COUNT(SalesOrderID) AS '# of Orders'
+  FROM AdventureWorks2008R2.Sales.SalesOrderHeader
+  GROUP BY CustomerID, AccountNumber
+  ORDER BY '# of Orders' DESC;
+
+-----------------------------------------------------Using the OVER clause-------------------------------------------------------------------------
+ ## provide aggregated values for each department
+    SELECT DISTINCT Name  
+       , MIN(Rate) OVER (PARTITION BY edh.DepartmentID) AS MinSalary  
+       , MAX(Rate) OVER (PARTITION BY edh.DepartmentID) AS MaxSalary  
+       , AVG(Rate) OVER (PARTITION BY edh.DepartmentID) AS AvgSalary  
+       ,COUNT(edh.BusinessEntityID) OVER (PARTITION BY edh.DepartmentID) AS EmployeesPerDept  
+   FROM HumanResources.EmployeePayHistory AS eph  
+   JOIN HumanResources.EmployeeDepartmentHistory AS edh  
+       ON eph.BusinessEntityID = edh.BusinessEntityID  
+   JOIN HumanResources.Department AS d  
+       ON d.DepartmentID = edh.DepartmentID  
+   WHERE edh.EndDate IS NULL  
+   ORDER BY Name;  
+   
+ ## return the price of the least expensive product in each sales order
+    SELECT DISTINCT MIN(UnitPrice) OVER(PARTITION BY SalesOrderNumber) AS LeastExpensiveProduct,  
+           SalesOrderNumber  
+    FROM dbo.FactResellerSales    
+    WHERE SalesOrderNumber IN (N'SO43659', N'SO43660', N'SO43664')  
+   ORDER BY SalesOrderNumber; 
+ 
+ ## provide a moving average of yearly sales for each territory
+    SELECT BusinessEntityID, TerritoryID   
+       ,DATEPART(yy,ModifiedDate) AS SalesYear  
+       ,CONVERT(varchar(20),SalesYTD,1) AS  SalesYTD  
+       ,CONVERT(varchar(20),AVG(SalesYTD) OVER (PARTITION BY TerritoryID   
+                                                ORDER BY DATEPART(yy,ModifiedDate)   
+                                                ),1) AS MovingAvg  
+       ,CONVERT(varchar(20),SUM(SalesYTD) OVER (PARTITION BY TerritoryID   
+                                                ORDER BY DATEPART(yy,ModifiedDate)   
+                                                ),1) AS CumulativeTotal  
+    FROM Sales.SalesPerson  
+    WHERE TerritoryID IS NULL OR TerritoryID < 5  
+    ORDER BY TerritoryID,SalesYear;  
+    
+---------------------------------------------------------COUNT-------------------------------------------------------------------------
+ ## return the departments in a company that have more than 15 employees
+    SELECT DepartmentName, 
+           COUNT (EmployeeKey) AS EmployeeInDept
+    FROM dob.DimEmployee
+    GROUP BY DepartmentName
+    HAVING COUNT(EmployeeKey) > 15;
+    
+## return the number of products that are contained in each of the specified sales orders.
+   SELECT DISTINCT COUNT (ProductKey) OVER (PARTITION BY SalesOrderNumber) AS ProductCount,
+          SalesOrderNamber
+   FROM dbo.FactInternetSales  
+   WHERE SalesOrderNumber IN (N'SO53115',N'SO55981');  
+   
+---------------------------------------------------------RANK-------------------------------------------------------------------------
+ ## ranks the products in inventory the specified inventory locations according to their quantities    
+    USE AdventureWorks2012;  
+    GO
+    SELECT i.ProductID, p.Name, i.LocationID, i.Quantity
+           , RANK() OVER(PARTITION BY i.LocationID ORDER BY i.Quantity DESC) AS Rank
+    FROM Production.ProductInventory AS i
+    INNER JOIN
+         Production.Product AS p
+    ON i.ProductID = p.ProductID
+    WHERE i.LocationID BETWEEN 3 AND 4
+    ORDER BY i.LocationID;
+    GO
+
+ ## returns the top ten employees ranked by their salary
+    USE AdventureWorks2012 
+    SELECT TOP(10) BusinessEntityID, Rate,
+           RANK() OVER(ORDER BY Rate DESC) AS RankBySalary
+    FROM HumanResources.EmployeePayHistory AS eph1
+    WHERE RateChangeDate = (SELECT MAX(RateChange)
+                            From HumanResources.EmployeePayHistory AS eph2  
+                            WHERE eph1.BusinessEntityID = eph2.BusinessEntityID)  
+   ORDER BY BusinessEntityID;
+
