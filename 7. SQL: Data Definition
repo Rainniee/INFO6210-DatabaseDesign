@@ -1,0 +1,96 @@
+** SQL Data Types **
+eg. branchNo CHAR(4)         address VARCHAR(30)
+    salary DECIMAL(7,2)      viewDate DATE
+Operator:
+ 1. LOWER / UPPER: Converts uppercase & lowercase letters
+ 2. CAST: Converts a value expression of one data type into a value in another data type  
+ 3. CASE: Returns one of a specified set of values, based on some condition
+    eg. CASE type
+             WHEN ‘House’  THEN 1
+             WHEN ‘Flat’   THEN 2
+             ELSE 0
+        END
+ 4. CURRENT_DATE: Returns the current date in the time zone that is local to the user.
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------
+** Integrity enhancement Feature **
+   Integrity protect the database from becoming inconsistent
+1. Required Data
+   eg. position VARCHAR(10) NOT NULL
+2. Domain Constraints
+   eg. sex CHAR NOT NULL CHECK ( sex IN (‘M’, ‘F’))
+3. Entity Integrity
+   eg. PRIMARY KEY( clientNo, propertyNo )
+4. Referential Integrity
+   eg. FOREIGN KEY( branchNo ) REFERENCES Branch
+5. General Constraints
+   eg. CREATE ASSERTION StaffNotHandlingTooMuch
+           CHECK (NOT EXISTS (SELECT staffNo
+                              FROM PropertyForRent
+                              GROUP BY staffNo
+                              HAVING COUNT(*) > 100))
+                              
+-------------------------------------------------------------------------------------------------------------------------------------------
+** Data Definition **
+1. CREATE TABLE
+   eg. CREATE DOMAIN OwnerNumber AS VARCHAR(5)
+          CHECK (VALUE IN (SELECT ownerNo FROM PrivateOwner));
+2. ALTER TABLE
+   eg. ALTER TABLE Staff
+           ALTER position DROP DEFAULT;
+           ALTER sex SET DEFAULT ‘F’ ;
+   eg. ALTER TABLE Client
+           ADD prefNoRooms PropertyRooms;
+3. DROP TABLE
+   eg. DROP TABLE PropertyForRent;
+4. CREATE INDEX
+An index is a structure that provides accelerated access to the rows of a table based on the values of one or more columns
+   eg. CREATE UNIQUE INDEX PropertyNoInd ON PropertyForRent ( propertyNo );
+5. DROP INDEX
+   eg. DROP INDEX Rentlnd ;
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+** Views **
+The dynamic result of one or more relational operations operating on the base relations to produce another relation. 
+A view is a virtual relation that does not necessarily exist in the database but can be produced at the time of request.
+
+1. CREATE VIEW
+  #1.1 Create a horizontal view (restricts a user’s access to selected rows of one or more tables)
+   eg. Create a view so that the manager at branch B003 can see the details only for staff who work in his or her branch office.
+     CREATE VIEW Manager3Staff
+     AS SELECT *
+        FROM Staff
+        WHERE branchNo = ‘B003’;
+ 
+  #1.2 Create a vertical view
+   eg. Create a view of the staff details at branch B003 that excludes salary information
+       so that only managers can access the salary details for staff who work at their branch.
+     CREATE VIEW Staff3
+     AS SELECT staffNo, fName, IName, position, sex
+        FROM Manager3Staff ;
+  
+  #1.3 Grouped and joined views
+    eg. Create a view of staff who manage properties for rent, which includes the branch number they work at, their staff number, and the number of properties they manage
+      CREATE VIEW StaffPropCnt ( branchNo , staffNo , cnt )
+      AS SELECT s. branchNo , s. staffNo , COUNT(*) AS [PropertySum]
+         FROM Staff s, PropertyForRent p
+         WHERE s. staffNo = p.staffNo
+         BY s.branchNo , s.staffNo 
+
+2. DROP VIEW
+   eg. DROP VIEW Manager3Staff ;
+
+3. Restrictions on Views
+##1> If a column in the view is based on an aggregate function
+     then the column may appear only in SELECT and ORDER BY clauses of queries that access the view.
+##2> A grouped view may never be joined with a base table or a view.   
+   
+4. Advantages and Disadvantages of Views
+       Advantages                               Disadvantages 
+     Data independence                        Update restriction
+     Currency                                 Structure restriction
+     Improved security                        Performance
+     Reduced complexity
+     Convenience
+     Customization
+     Data integrity
