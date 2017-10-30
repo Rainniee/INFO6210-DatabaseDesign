@@ -1,0 +1,73 @@
+** Database **
+   A collection of related data 
+** Database management system (DBMS) **
+   software that manages and controls access to the database
+** Database application **
+   A program that interacts with the database at some point in its execution
+** Database system **
+   A collection of application programs that interact with the database along with the DBMS and the database itself
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+** Traditional File-Based Systems **
+   A collection of application programs that perform services for the end-users, such as the production of reports. 
+   Each program defines and manages its own data.
+## A file is simply a collection of records, which contains logically related data. 
+## Limitations of the File-Based Approach:
+   1. Separation and isolation of data
+   2. Duplication of data
+   3. Data dependence
+   4. Incompatible file formats
+   5. Fixed queries/proliferation of application programs
+
+** Database **
+   A shared collection of logically related data and its description, designed to meet the information needs of an organization.
+## The description of the data is known as the system catalog (or data dictionary or metadata—the “data about data”).
+## An entity is a distinct object (a person, place, thing, concept, or event) in the organization that is to be represented in the database.
+## An attribute is a property that describes some aspect of the object that we wish to record
+## A relationship is an association between entities. 
+
+** Database Management System (DBMS) **
+   A software system that enables users to define, create, maintain, and control access to the database.
+## 1. Data Definition Language (DDL)
+      DDL allows users to specify the data types and structures and the constraints on the data to be stored in the database. 
+## 2. Data Manipulation Language (DML)
+      It allows users to insert, update, delete, and retrieve data from the database
+      DML can provide a general inquiry facility to this data, called a query language
+   The most common query language is the Structured Query Language (SQL)
+      It provides controlled access to the database
+
+** (Database) Application Programs **
+   A computer program that interacts with the database by issuing an appropriate request (typically an SQL statement) to the DBMS.
+## Components of the DBMS Environment:
+        hardware    software              data              procedures    people
+            (Machine)                   (Bridge)                    (Human)
+                            Schema: the structure of the database 
+                           Database design: determine the structure of the database
+                           
+** Roles in the Database environment **
+   1. Data and Database Administrators     2. Database Designers     
+   3. Application Developers               4. End-Users          
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+** History of Database Management Systems **
+1. The CODASYL and hierarchical approaches represented the first generation of DBMSs.
+2. Relational DBMSs are referred to as second-generation DBMSs. 
+3. The object-oriented DBMS (OODBMS) and the object-relational DBMS (ORDBMS) are referred to as third-generation DBMSs.
+4. Data warehousing systems appear -- Web–database integration -- XML
+
+** Advantages of DBMSs **
+               Control of data redundancy                     economy of scale
+               Data consistency                               Balance of conflicting requirements
+               More information from the same amount of data
+               Improved data accessibility and responsiveness
+               Sharing of data                                Increased productivity
+               Improved data integrity                        Improved maintenance through data independence
+               Improved security                              Increased concurrency
+               enforcement of standards                       Improved backup and recovery services
+
+** Disadvantages **
+               Complexity                 Size
+               Cost of DBMSs              Additional hardware costs
+               Cost of conversion
+               Performance                Greater impact of a failure
+
