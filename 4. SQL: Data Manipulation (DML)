@@ -1,0 +1,198 @@
+## SQL is an example of a transform-oriented language, has two major components:
+ 1.a Data Definition Language (DDL) for defining the database structure and controlling access to the data;
+ 2.a Data Manipulation Language (DML) for retrieving and updating data.
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+** Data Manipulation Statement **
+• SELECT – to query data in the database • INSERT – to insert data into a table
+• UPDATE – to update data in a table     • DELETE – to delete data from a table
+eg. 
+INSERT INTO PropertyForRent(propertyNo, street, city, postcode, type, rooms, rent, ownerNo, staffNo, branchNo)
+VALUES (‘PA14’, ‘16 Holhead’, ‘Aberdeen’, ‘AB7 5SU’, ‘House’, 6, 650.00, ‘CO46’, ‘SA9’, ‘B007’);
+
+** Simple Queries **
+SELECT [DISTINCT | ALL] {* | [columnExpression [ AS newName]] [, . . .]}
+FROM TableName [alias] [, . . .]
+[WHERE condition]                                   # WHERE filters the rows subject to some condition                     
+                                                    # HAVING filters the groups subject to some condition
+[GROUP BY columnList] [HAVING condition]            # GROUP BY forms groups of rows with the same column value 
+[ORDER BY columnList]                               # ORDER BY specifies the order of the output
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+## To eliminate the duplicates, we use the DISTINCT keyword
+eg. SELECT DISTINCT propertyNo  FROM Viewing
+
+## TO use a calculated field, you specify an SQL expression in the SELECT list.
+eg. SELECT staffNo, fName, IName, salary/ 12 AS monthlySalary   FROM Staff
+
+## The five basic search conditions (or predicates, using the ISO terminology) are as follows:
+• Comparison  • Range  • Set membership  • Pattern match   • Null 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+## rules for evaluating a conditional expression:
+• NOT before AND and OR   • AND evaluated before OR
+eg. WHERE city = ‘London’ OR city = ‘Glasgow’;   WHERE salary BETWEEN 20000 AND 30000;
+
+## The set membership test (IN/NOT IN) tests whether a data value matches one of a list of values
+eg. WHERE position IN (‘Manager’, ‘Supervisor’);
+
+## pattern match search condition (LIKE/NOT LIKE)
+eg 1. LIKE ‘H%’ 
+   means the first character must be H
+   2. LIKE ‘H_ _ _’ 
+   means that there must be exactly four characters in the string, the first of which must be an H
+   3. LIKE ‘%e’ 
+   means any sequence of characters, of length at least 1, with the last character an e
+   4. LIKE ‘%Glasgow%’ 
+   means a sequence of characters of any length containing Glasgow
+   5. NOT LIKE ‘H%’ 
+   means the first character cannot be an H
+   6. LIKE ‘15#%’ ESCAPE ‘#’
+   check for the string ‘15%’, use an escape character
+
+## NULL search condition (IS NULL/IS NOT NULL)
+eg. WHERE propertyNo = ‘PG4’ AND comment IS NULL;  √
+    WHERE propertyNo = ‘PG4’ AND comment = ‘ ’；   ×
+    
+** Sorting Results (ORDER BY Clause) **
+## DESC 降序，由大到小  ASCE 升序
+   eg. ORDER BY salary DESC; 
+   
+-------------------------------------------------------------------------------------------------------------------------------------------------   
+** Using the SQL Aggregate Functions **
+• COUNT – returns the number of values in a specified column
+• SUM – returns the sum of the values in a specified column
+• AVG – returns the average of the values in a specified column
+• MIN – returns the smallest value in a specified column
+• MAX – returns the largest value in a specified column
+
+## 1. Apart from COUNT(*), each function eliminates nulls first and operates only on the remaining nonnull values.
+## 2. DISTINCT has no effect with the MIN and MAX functions. However, it may have an effect on the result of SUM or AVG.
+      ALL : if we do not want to eliminate duplicates;  DISTINCT : can be specified only once in a query.
+     
+-------------------------------------------------------------------------------------------------------------------------------------------------   
+** Grouping Results (GROUP BY Clause) **
+GROUP BY: groups the data from the SELECT table(s) and produces a single summary row for each group.
+## 1. When GROUP BY is used, each item in the SELECT list must be single-valued per group.
+## 2. All column names in the SELECT list must appear in the GROUP BY clause unless the name is used only in an aggregate function. 
+## 3. there may be column names in the GROUP BY clause that do not appear in the SELECT list.
+eg. SELECT branchNo, COUNT (staffNo) AS myCount, SUM (salary) AS mySum
+    FROM Staff
+    GROUP BY branchNo
+    ORDER BY branchNo;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------   
+** Restricting groupings (HaVING clause) **
+## WHERE clause filters individual rows going into the final result table 
+   HAVING filters groups going into the final result table
+## Require: column names used in the HAVING clause must also appear in the GROUP BY list or be contained within an aggregate function.
+eg. SELECT branchNo, COUNT (staffNo) AS myCount, SUM (salary) AS mySum
+    FROM Staff
+    GROUP BY branchNo
+    HAVING COUNT (staffNo) > 1
+    ORDER BY branchNo;
+    
+-------------------------------------------------------------------------------------------------------------------------------------------------   
+** Subqueries **
+A sub-select can be used in the WHERE and HAVING clauses of an outer SELECT statement, where it is called a subquery or nested query.
+eg. SELECT staffNo, fName, IName, position
+    FROM Staff
+    WHERE branchNo = (SELECT branchNo
+                      FROM Branch
+                      WHERE street = ‘163 Main St’);
+
+eg. SELECT staffNo, fName, IName, position,
+           salary – ( SELECT AVG (salary) FROM Staff) AS salDiff
+    FROM Staff
+    WHERE salary > ( SELECT AVG (salary) FROM Staff);
+
+eg. SELECT propertyNo, street, city, postcode, type, rooms, rent
+    FROM PropertyForRent
+    WHERE staffNo IN (SELECT staffNo
+                      FROM Staff
+                      WHERE branchNo = (SELECT branchNo
+                                        FROM Branch
+                                        WHERE street = ‘163 Main St’));
+
+Require:
+1. The ORDER BY clause may not be used in a subquery
+2. The subquery SELECT list must consist of a single column name or expression, except for subqueries that use the keyword EXISTS
+3. The subquery must appear on the right-hand side of the comparison
+   eg. WHERE (SELECT AVG (salary) FROM Staff) < salary  -- X   WHERE salary > ( SELECT AVG (salary) FROM Staff) -- √
+
+-------------------------------------------------------------------------------------------------------------------------------------------------                         
+** ANY and ALL **                 
+1. If the subquery is preceded by the keyword ALL, the condition will be true only if it is satisfied by all values produced by the subquery
+2. If the subquery is preceded by the keyword ANY, the condition will be true if it is satisfied by any (one or more) values produced by the subquery
+eg. Find all staff whose salary is larger than the salary of at least one member of staff at branch B003.
+    SELECT staffNo, fName, IName, position, salary
+    FROM Staff
+    WHERE salary > SOME/ANY (SELECT salary
+                             FROM Staff
+                             WHERE branchNo = ‘B003’);
+eg. Find all staff whose salary is larger than the salary of every member of staff at branch B003.
+    SELECT staffNo, fName, IName, position, salary
+    FROM Staff
+    WHERE salary > ALL (SELECT salary
+                        FROM Staff
+                        WHERE branchNo = ‘B003’);
+
+-------------------------------------------------------------------------------------------------------------------------------------------------                         
+** Multi-table Queries **
+## 1. Three-table join
+   SELECT b.branchNo, b.city, s.staffNo, fName, IName, propertyNo
+   FROM Branch b, Staff s, PropertyForRent p
+   WHERE b.branchNo = s.branchNo AND s.staffNo = p.staffNo
+   ORDER BY b.branchNo, s.staffNo, propertyNo;
+
+## 2. Outer joins
+   Outer join retains rows that do not satisfy the join condition.
+   
+## 3. Left Outer join  (Right Outer Join is the same)
+   Left Outer join includes not only those rows that have the same city, but also those rows of the first (left) table that are unmatched with rows from the second (right) table.
+   
+-------------------------------------------------------------------------------------------------------------------------------------------------                         
+** EXISTS and NOT EXISTS **
+Designed for use only with subqueries. They produce a simple true/false result.
+EXISTS is true if and only if there exists at least one row in the result table returned by the subquery.
+eg. Find all staff who work in a London branch office.
+    SELECT staffNo, fName, IName, position
+    FROM Staff s
+    WHERE EXISTS (SELECT *
+                  FROM Branch b
+                  WHERE s.branchNo = b.branchNo AND city = ‘London’);
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------                         
+** Combining Result Tables (UNION, INTERSECT, EXCEPT) **
+1. The Union (UNION) of two tables, A and B
+   Table containing all rows that are in either A OR B or both.            ∪ 并集
+2. The Intersection (INTERSECT) of two tables, A and B
+   Table containing all rows that are common to both tables A and B         ∩ 交集
+3. The Difference （EXCEPT）of two tables, A and B  
+   Table containing all rows that are in table A but are not in table B     — 余集
+
+eg. 1> Construct a list of all cities where there is both a branch office and a property.
+    (SELECT city  FROM Branch)
+     INTERSECT
+    (SELECT city  FROM PropertyForRent); 
+
+    2> Construct a list of all cities where there is a branch office but no properties.
+    (SELECT city  FROM Branch)
+     EXCEPT
+    (SELECT city  FROM PropertyForRent); 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------                         
+** Database Updates **
+three SQL statements that are available to modify the contents of the tables in the database:
+• INSERT – adds new rows of data to a table
+• UPDATE – modifies existing data in a table
+• DELETE – removes rows of data from a table
+eg.   
+1. INSERT INTO Staff
+   VALUES (‘SG16’, ‘Alan’, ‘Brown’, ‘Assistant’, ‘M’, DATE ‘ 1957-05-25’, 8300, ‘B003’);   
+2. UPDATE Staff
+   SET salary = salary* 1.05
+   WHERE position = ‘Manager’;
+3. DELETE FROM Viewing
+   WHERE propertyNo = ‘PG4’;   
+ 
