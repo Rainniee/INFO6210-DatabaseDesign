@@ -1,0 +1,68 @@
+** Conceptual database design **
+The process of constructing a model of the data used in an enterprise, independent of all physical considerations.
+   1> The main objective of Step 1 of the methodology is to build a conceptual data model of the data requirements of the enterprise. 
+   2> A conceptual data model comprises: entity types, relationship types, attributes, attribute domains, primary keys, and alternate keys.
+
+** Logical database design **
+The process of constructing a model of the data used in an enterprise based on a specific data model
+But independent of a particular DBMS and other physical considerations.
+   1> A logical data model includes ER diagram(s), relational schema
+   2> supporting documentation such as the data dictionary, which is produced throughout the development of the model.
+   
+** Physical database design **
+The process of producing a description of the implementation of the database on secondary storage; 
+it describes the base relations, file organizations, and indexes used to achieve efficient access to the data, and any associated integrity constraints and security measures.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Conceptual database design
+Step 1 Build conceptual data model
+     1.1 Identify entity types                1.2 Identify relationship types
+     1.3 Identify and associate attributes with entity or relationship types
+     1.4 Determine attribute domains          1.5 Determine candidate, primary, and alternate key attributes
+     1.6 Consider use of enhanced modeling concepts (optional step)
+     1.7 Check model for redundancy           1.8 Validate conceptual data model against user transactions
+     1.9 Review conceptual data model with user
+
+Logical database design for the relational model
+Step 2 Build logical data model
+     2.1 Derive relations for logical data model         2.2 Validate relations using normalization
+     2.3 Validate relations against user transactions    2.4 Check integrity constraints
+     2.5 Review logical data model with user.            2.6 Merge logical data models into global model (optional step) 
+     2.7 Check for future growth
+
+Physical database design for relational databases
+Step 3 Translate logical data model for target DBMS
+     3.1 Design base relations               3.2 Design representation of derived data
+     3.3 Design general constraints
+Step 4 Design file organizations and indexes
+     4.1 Analyze transactions                4.2 Choose file organizations
+     4.3 Choose indexes                      4.4 Estimate disk space requirements
+Step 5 Design user views
+Step 6 Design security mechanisms
+Step 7 Consider the introduction of controlled redundancy
+Step 8 Monitor and tune the operational system
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Step 1
+## 1. When identify relationship types
+Use Entity–Relationship (ER) diagrams, to represent entities and how they relate to one another more easily
+## 2. A conceptual data model is supported by documentation, such as ER diagrams and a data dictionary, which is
+produced throughout the development of the model.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Step 2
+## 1. We describe how relations are derived for the following structures that may occur in a conceptual data model:
+(1) strong entity types;
+(2) weak entity types;
+(3) one-to-many (1:*) binary relationship types;
+(4) one-to-one (1:1) binary relationship types;
+(5) one-to-one (1:1) recursive relationship types;
+(6) superclass/subclass relationship types;
+(7) many-to-many (*:*) binary relationship types;
+(8) complex relationship types;
+(9) multi-valued attributes.
+
+## 2. The relational schema is validated using the rules of normalization to ensure that each relation is structurally correct.
+      Normalization is used to improve the model so that it satisfies various constraints that avoids unnecessary duplication of data. 
+      
+## 3. Integrity constraints: imposed on the database to protect the database from becoming incomplete, inaccurate, or inconsistent. 
