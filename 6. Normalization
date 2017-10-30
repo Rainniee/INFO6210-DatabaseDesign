@@ -1,0 +1,59 @@
+** Normalization **
+A technique for producing a set of relations with desirable properties, given the data requirements of an enterprise.
+
+** Functional Dependencies **
+B is functionally dependent on A /  A functionally determines B, means if each value of A is associated with exactly one value of B
+##  A -> B, A = Determinant 
+    staffNo -> position
+    
+** full functional dependency **
+B is fully functionally dependent on A, means B is functionally dependent on A, but not on any proper subset of A
+## full functional dependency 
+   if removal of any attribute from A results in the dependency no longer existing
+## there must be a full functional dependency between the attribute(s) on the left-hand and right-hand sides of the dependency
+
+** partial dependency **
+   if there is some attribute that can be removed from A and yet the dependency still holds.
+eg. 
+   full functional dependency : staffNo -> branchNo
+   partial dependency : staffNo, sName -> branchNo  
+
+** Transitive dependency **
+If A -> B and B -> C, then C is transitively dependent on A via B (provided that a is not functionally dependent on B or C)
+
+** anomalies **
+Relations with data redundancy suffer from update anomalies, which can be classified as insertion, deletion, and modification anomalies.
+
+-------------------------------------------------------------------------------------------------------------------------------------------- 
+** The Process of Normalization **
+   Become progressively more restricted (stronger) in format and also less vulnerable to update anomalies.
+1. Three normal forms were initially proposed called First Normal Form (1NF), Second Normal Form (2NF), and Third Normal Form (3NF)
+2. only First Normal Form (1NF) that is critical in creating relations
+   
+   Process:
+                           UNF    
+                            |     [Remove repeating groups]                       
+                           1NF
+                            |     [Remove partial dependencies] 
+                           2NF
+                            |     [Remove transitive dependencies] 
+                           3NF 
+
+-------------------------------------------------------------------------------------------------------------------------------------------- 
+** First Normal Form (1NF) **
+   A relation in which the intersection of each row and column contains one and only one value.
+## Identify and remove repeating groups within the table, repeating groups: occurs with multiple values.
+## Two common approaches to removing repeating groups from unnormalized tables:
+ 1> “flattening” the table:
+    fill in the blanks by duplicating the nonrepeating data, where required
+ 2> By placing the repeating data, along with a copy of the original key attribute(s), in a separate relation.
+
+** Second Normal Form (2NF) **
+   A relation that is in first normal form and every non-primary-key attribute is fully functionally dependent on the primary key
+   Based on the concept of full functional dependency, relation with a single-attribute primary key is automatically in at least 2NF
+# A relation that is in first normal form and every non-candidate-key attribute is fully functionally dependent on any candidate key
+   
+** Third Normal Form (3NF) **
+   A relation that is in 1NF & 2NF and where no non-primary-key attribute is transitively dependent on the primary key
+   Remove the transitively dependent attribute(s) from the relation by placing the attribute(s) in a new relation along with a copy of the determinant
+# A relation that is in first and second normal form and in which no non-candidate-key attribute is transitively dependent on any candidate key 
