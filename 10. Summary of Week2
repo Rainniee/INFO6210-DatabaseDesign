@@ -1,0 +1,21 @@
+** ER Model **
+• Entities    • Attributes    • Relationships
+
+** Data Integrity **
+• Domain Integrity (Columns 列)     • Entity Integrity (rows 行)
+• Referential Integrity (Between tables or cloumns in different rows of the same table)
+
+** UML Notation **
+     Entity Name                  Binary Relationship          Complex Relationship
+  -----------------                □    ---->   □                  □ --- ◇ --- □   
+    Attribute Name                  RelationName                         | RelationName    
+                                                                         □
+** Crow's Foot Notation **    
+1. Primary Key = *
+2. Relationship between entities 
+   One side: --||-
+
+
+
+
+
