@@ -64,3 +64,93 @@
 • Extent Fragmentation
   Extent fragmentation occurs when the extents of a table or index are not contiguous with the database leaving extents from one or more indexes intermingled in the file.
   
+--------------------------------------------------Lab2-2 Example----------------------------------------------------------------------                                
+## INNER is the default when JOIN is the only keyword used.
+   INNER JOIN returns only matching rows from left and right tables.
+
+## If two tables have the same column name in a query, we must designate where the column is from by using the format
+   TableName.ColumnName.  
+## If a column name is unique between the JOINed tables, The TableName.ColumnName format is not required.
+
+## LEFT OUTER JOIN returns all rows from the left table, but only the matching rows from the right table. 
+
+## GROUP BY aggregates on the column(s) we specify
+## ORDER BY does sorting
+ eg. SELECT c.CustomerID,
+            PersonID,
+            COUNT(SalesOrderID) AS "Total Order"
+     FROM Sales.Customer c
+     INNER JOIN Sales.SalesOrderHeader oh
+       ON c.CustomerID = oh.CustomerID
+     GROUP BY c.CustomerID, PersonID
+     ORDER BY "Total Order" DESC;
+     
+## For regular filtering in a query, we use WHERE.
+## If we use GROUP BY in a query, then we use HAVING to do the filtering for groups.
+ eg. SELECT c.CustomerID,
+            PersonID,
+            COUNT(SalesOrderID) AS "Total Order"
+     FROM Sales.Customer c 
+     INNER JOIN Sales.SalesOrderHeader oh
+       ON c.CustomerID = oh.CustomerID
+     GROUP BY c.CustomerID, PersonID
+     HAVING COUNT(SalesOrderID) > 20
+     ORDER BY "Total Order" DESC;
+
+## IN OPERATOR Can be used with any data type
+ eg.
+     WHERE Color IN ('Red', 'Blue', 'White') -- character comparison
+     WHERE ListPrice IN (337.22, 594.83, 63.50, 8.99) -- numeric comparison
+
+## LIKE operator
+1. % is the wildcard symbol representing 0 to many characters
+2. - is the wildcard symbol representing exactly one character
+ eg 1. Select any person whose last name begins with a
+     SELECT FirstName, MiddleName, LastName   FROM Person.Person
+     WHERE LastName LIKE 'a%'                 ORDER BY LastName;
+ eg 2. Select any person whose last name begins with a or c or e
+     SELECT FirstName, MiddleName, LastName   FROM Person.Person
+     WHERE LastName LIKE '[ace]%'             ORDER BY LastName;
+     
+## Subqueries are queries that are embedded in another query.
+ eg. 
+    SELECT Name [Product],ListPrice,
+          (SELECT MAX(ListPrice) FROM Production.Product)
+                  AS [Max Price],
+                 (ListPrice / (SELECT MAX(ListPrice) FROM Production.Product)) * 100
+                  AS [Percent of MAX]
+    FROM Production.Product
+    WHERE ListPrice > 0
+    ORDER BY ListPrice DESC;
+
+-----------------------------------------------INTERSECT and EXCEPT Commands---------------------------------------------------------------------                                
+##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
