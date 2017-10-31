@@ -124,33 +124,9 @@
     ORDER BY ListPrice DESC;
 
 -----------------------------------------------INTERSECT and EXCEPT Commands---------------------------------------------------------------------                                
-##
+## EXCEPT returns only distinct values from the left query that are not returned from the right query
+## INTERSECT returns only distinct values that are returned by both queries
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+Basic rules:
+• Number and order of columns must be the same in all queries.
+• Data types must be identical or compatible.
