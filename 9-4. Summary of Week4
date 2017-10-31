@@ -1,0 +1,34 @@
+-----------------------------------------------------Normalization------------------------------------------------------------------------
+** Purpose of Normalization **
+ • Produce a set of suitable entities that support the data requirements of an enterprise
+ • Minimize data redundancy
+ • Provide reporting flexibility
+ • Maintain data integrity
+ 
+ ** Lossless-join and Dependency Preservation Properties **
+ • Two important properties of decomposition:
+ 1. Lossless-join property enables us to find any instance of the original relation from corresponding instances in the smaller relations.
+ 2. Dependency preservation property enables us to enforce a constraint on the original relation by enforcing some constraint on each of the smaller relations.
+ 
+ --------------------** First Normal Form **-----------------------------
+ • Remove multi-valued attributes      • Remove composite attributes
+ • Remove repeating groups             • Remove many-to-many relationship
+ 
+ -------------------** Second Normal Form **----------------------------
+ • Remove partial dependencies
+ 
+ -------------------** Third Normal Form **----------------------------
+ • Remove transitive dependencies
+
+ -------------------** SQL SELECT **----------------------------
+   
+   SELECT T.TerritoryID, T.Name,
+          COUNT(S.BusinessEntityID) AS [Total Sales People]
+   FROM Sales.SalesTerritory T
+   INNER JOIN 
+        Sales.SalesPerson S
+   ON T.TerritoryID = S.TerritoryID
+   WHERE T.CountryRegionCode = 'US'
+   GROUP BY T.TerritoryID, T.Name
+   HAVING COUNT(S.BusinessEntityID) > 1
+   ORDER BY Count(S.BusinessEntityID);
