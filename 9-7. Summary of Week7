@@ -1,0 +1,83 @@
+------------------------------------------------ Example of a CASE function --------------------------------------------------------------
+** CASE function allows conditional processing
+** The ROUND function does number rounding
+  eg. SELECT ProductID, Name, ListPrice
+             , (SELECT ROUND(AVG(ListPrice),2) AS AvgPrice
+                FROM Production.Product) AP
+             , CASE
+                  WHEN ListPrice - (SELECT ROUND(AVG(ListPrice), 2) 
+                       AS AvgPrice FROM Production.Product) = 0
+                       THEN 'Average Price'
+                  WHEN ListPrice - (SELECT ROUND(AVG(ListPrice), 2) 
+                       AS AvgPrice FROM Production.Product) < 0
+                       THEN 'Below Average Price'
+                  ELSE 'Above Average Price'
+                END AS PriceComparison
+      FROM Production.Product
+      ORDER BY ListPrice DESC;
+
+------------------------------------------- Example of a RANK/DENSE_RANK function --------------------------------------------------------------
+** Use the RANK function without/with the PARTITION BY clause to return the rank of each row.
+   If the PARTITIAN BY clause is not used, the entire row set returned by a query will be treated as a single big partition.
+** When the PARTITIAN BY clause is used, the ranking will be performed within each partitioning value.
+** RANK function does not always return consecutive integers. Sometimes we say the RANK function creates gaps.
+ eg.
+    SELECT
+          RANK() OVER(PARTITION BY ProductID ORDER BY OrderQty DESC) AS [Rank],
+          SalesOrderID, ProductID, UnitPrice, OrderQty
+    FROM Sales.SalesOrderDetail
+    WHERE UnitPrice >75;
+
+** the numbers returned by the DENSE_RANK function do not have gaps and always have consecutive ranks.
+ eg. 
+    USE AdventureWorks2008R2;
+    GO
+    SELECT i.ProductID, p.Name, i.LocationID, i.Quantity
+           ,DENSE_RANK() OVER (PARTITION BY i.LocationID ORDER BY i.Quantity DESC) AS Rank
+    FROM Production.ProductInventory AS i
+    INNER JOIN Production.Product AS p
+        ON i.ProductID = p.ProductID
+    WHERE i.LocationID BETWEEN 3 AND 4
+    ORDER BY i.LocationID;
+    GO
+ 
+ ** How to Best Work on SQL RANK Question
+ 1) Assign an alias to the new column, AND don’t change any other part of the original SQL statement.
+ 2) The new column is usually based on an existing column contained in the SELECT clause of the original SQL statement. 
+ 3) The existing column can be either a regular column or an aggregated column.
+ 4) The default order is ASC. If we want the descending order, specify DESC.
+ 
+--------------------------------------------- Remove Duplicates From A Table --------------------------------------------------------------
+** Option 1： 
+-- Use ROW_NUMBER() with PARTITION BY
+              DELETE dupes
+              FROM (SELECT ROW_NUMBER()
+                    OVER (PARTITION BY Name ORDER BY Name) rownum
+                    FROM NameList) dupes
+              WHERE dupes.rownum > 1;   
+-- Validate duplicates have been removed
+             SELECT Name FROM NameList 
+             ORDER BY Name;
+** Option 2
+-- Use SELECT DISTINCT INTO a new table
+             SELECT DISTINCT Name
+             INTO NewTable
+             FROM NameList;
+
+--------------------------------------------- SQL variables AND While --------------------------------------------------------------
+** SQL variables start with either @ or @@.
+       @ indicates a local variable, which is in effect in the current scope.
+       @@ indicates a global variable, which is in effect for all scopes of the current connection.
+
+** simple example of WHILE Statement
+       We use the variable @counter in this example to determine when to terminate the WHILE loop in this example.
+       We use CAST to convert an integer to character(s) so that we can concatenate the integer with other characters. 
+   eg.   
+       DECLARE @counter INT;
+       SET @counter = 0;
+       WHILE @counter <> 5
+         BEGIN
+           SET @counter = @counter + 1;
+           PRINT 'The counter : ' + CAST(@counter AS CHAR);
+         END;
+  
