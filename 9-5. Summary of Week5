@@ -1,0 +1,20 @@
+** Database Design Goal **
+   Data types that allow ‘right’ data in least amount of space
+   
+** Seven Categories of SQL Server Data Types **
+   1. Exact numeric      2. Approximate numeric         3. Monetary           4.Date and Time
+   5. Character          6. Binary                      7. Special Purpose
+   
+------------------------------------------------Find Identity Value-----------------------------------------------------------------
+** IDENT_CURRENT()
+   • Returns the last identity value generated for a specific table in any session and any scope.
+** @@IDENTITY
+   • Returns the last identity value generated for any table in the current session, across all scopes.
+** SCOPE_IDENTITY()
+   • Returns the last identity value generated for any table in the current session and the current scope.
+   
+** IDENT_CURRENT() Example
+  eg. returns the last identity value generated for the Person.Address table in the AdventureWorks2012 database.
+      USE AdventureWorks2012;
+      SELECT IDENT_CURRENT ('Person.Address') AS Current_Identity; 
+ 
