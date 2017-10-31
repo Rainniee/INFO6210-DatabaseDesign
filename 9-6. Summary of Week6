@@ -1,0 +1,66 @@
+--------------------------------------------------Indexes--------------------------------------------------------------------------
+## Index will improve query performance but slow down INSERT, UPDATE, and DELETE operations
+
+## Types of Indexes
+   • Clustered Indexes       • Non-Clustered Indexes      • Both can be unique or non unique
+## Index Structure
+   • B Tree/B+ Tree        • Root Nodes         • Intermediate Nodes           • Leaf Nodes
+   
+** Leaf Node **
+• Clustered Index
+  Leaf Node is the actual data pages
+     » Think ‘Dictionary’
+• Non-Clustered Index
+  Leaf Node is a Key Pointer to data
+     » Think ‘regular index’ found in the back of most books
+     
+** Clustered Table vs Heap
+• Clustered Table
+  Table that has a clustered index
+• Heap
+  Table that does not have a clustered index
+  
+** Distribution Statistics
+• Estimates how efficient an index would be for a query
+• To be useful:
+  1. Must be kept relatively current       2. Can manually UPDATE STATISTICS
+  
+** Index Maintenance
+• Drop / re-create indexes for large data load
+• Eliminate Under-Used Indexes
+• Add index to improve slow running queries
+• Index primary/foreign key columns to improve JOIN performance
+
+--------------------------------------------------Indexes Creation----------------------------------------------------------------------
+## Hints
+• Assign indexes on most-appropriate column(s)
+         PK/FK                                     Provides best JOIN performance
+         Other column(s) as appropriate            Which column(s) are queried most?
+         Look for table scans on large tables      Determine slowest-running queries---add indexes?
+
+• AVOID indexes on least-appropriate column(s)
+ TEXT
+  - Better to use FULL-Text indexes
+ Other column(s) that are inappropriate
+  - Wide columns: if above 20 characters
+  - Columns with frequently UPDATE activity
+
+--------------------------------------------------Index Fragmentation----------------------------------------------------------------------
+                                    • Unavoidable              • OLTP environment
+                                    • Causes more than the optimal amount of disk I/O to be performed in accessing a table
+                                    • Disk I/Os take longer than they optimally would
+
+## Common Causes of Index Fragmentation
+• INSERT and UPDATE operations causing Page splits
+• DELETE operations              
+• Large row size   
+
+## Types of Index Fragmentation
+• Internal Fragmentation
+  When pages are less than fully used, the part of each page that is unused constitutes a form of fragmentation
+• Logical Fragmentation
+  Logical fragmentation occurs when the pages in the doubly linked list are not contiguous in the index
+  meaning that indexes have pages in which the logical ordering of pages, which is based on the key value, does not match the physical ordering inside the data file.
+• Extent Fragmentation
+  Extent fragmentation occurs when the extents of a table or index are not contiguous with the database leaving extents from one or more indexes intermingled in the file.
+  
