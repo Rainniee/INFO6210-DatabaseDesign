@@ -1,0 +1,47 @@
+common ways to category/classify function:
+1. table-value function
+2. inline function
+3. user-define function
+
+Differences:
+scalar function: return a single value
+table-value: return a dataset/table
+inline: only 1 statement in the body
+multistatement: multiple statements in the body
+user-define vs. system function
+
+-------------------------------------------------------------------------------------------------------------------------------
+Differences between stored procedure and function：
+1. We can use a function in SELECT statement, but not a stored procedure.
+2. function cannot update database content, but stored procedure can
+   So when you want to collect a database from Amazon.com, where the comments always changing, the stored procedure is better.
+3. When manage a transaction(need to concern error handling), update/insert table or database content
+   better to use stored procedure.
+4. use EXEC to Execute the procedure; just use SELECT to Execute the new function.
+
+-------------------------------------------------------------------------------------------------------------------------------
+Useful Links
+
+Create a Stored Procedure
+http://msdn.microsoft.com/en-us/library/ms345415.aspx
+
+Create a Function
+http://msdn.microsoft.com/en-us/library/ms186755.aspx
+
+Use TRY and CATCH for Error Handling
+http://msdn.microsoft.com/en-us/library/ms175976.aspx
+
+XACT_STATE
+http://msdn.microsoft.com/en-us/library/ms189797.aspx
+
+DATEADD
+http://msdn.microsoft.com/en-us/library/ms186819.aspx
+
+DATEPART
+https://docs.microsoft.com/en-us/sql/t-sql/functions/datepart-transact-sql
+eg. SELECT DATEPART(DW, '11-14-2017')
+
+JOIN:
+Person, Customer, SalesHeader
+person.bussinesEntityId = customer.customerID
+SELECT INTO -> create a new table
