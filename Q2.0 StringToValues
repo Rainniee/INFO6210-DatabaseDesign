@@ -1,0 +1,75 @@
+-- StringToValues Function Return A Table Variable
+
+CREATE FUNCTION [dbo].StringToValues(@ListofIds nvarchar(max))
+RETURNS @rtn TABLE (IntegerValue int)
+AS
+BEGIN
+    WHILE(CHARINDEX(',', @ListofIds) > 0)
+        BEGIN
+            INSERT INTO @Rtn
+                SELECT LTRIM(RTRIM(SUBSTRING(@ListofIds, 1, CHARINDEX(',', @ListofIds) - 1)));
+            SET @ListofIds = SUBSTRING(@ListofIds, CHARINDEX(',', @ListofIds) + LEN(','), LEN(@ListofIds));
+        END;
+    INSERT INTO @Rtn SELECT LTRIM(RTRIM(@ListofIds));
+    RETURN;
+END;
+
+-- Test the function
+SELECT * FROM dbo.StringToValues('12100,14000,20000,38000,44220');
+
+
+/************* SUBSTRING *******************/
+
+SELECT name, SUBSTRING(name, 1, 1) AS Initial ,
+SUBSTRING(name, 3, 2) AS ThirdAndFourthCharacters
+FROM sys.databases
+WHERE database_id = 1;  
+
+--  Result:
+name 	               Initial 	                ThirdAndFourthCharacters
+master 	             m 	                      st
+
+
+/************* CHARINDEX *******************/
+
+CHARINDEX函数返回字符或者字符串在另一个字符串中的起始位置
+CHARINDEX函数调用方法如下：
+  -- CHARINDEX ( expression1 , expression2 [ , start_location ] )
+Expression1是要到expression2中寻找的字符中
+start_location是CHARINDEX函数开始在expression2中找expression1的位置
+CHARINDEX函数返回一个整数 返回的整数是要找的字符串在被找的字符串中的位置
+假如CHARINDEX没有找到要找的字符串 那么函数整数“0”
+
+eg.1 
+CHARINDEX(’SQL’, ’Microsoft SQL Server’)
+  这个函数命令将返回在“Microsoft SQL Server”中“SQL”的起始位置
+  在这个例子中，CHARINDEX函数将返回“S”在“Microsoft SQL Server”中的位置11
+
+eg.2
+假设你要显示Northwind数据库Customer表前5行联系人列的Last Name
+这是前5行数据:
+           ContactName
+           ------------------------------ 
+           Maria Anders
+           Ana Trujillo
+           Antonio Moreno
+           Thomas Hardy
+           Christina Berglund
+           
+CustomName包含客户的First Name和Last Name 它们之间被一个空格隔开
+用CHARINDX函数确定两个名字中间空格的位置 通过这个方法 我们可以分析ContactName列的空格位置
+这样我们可以只显示这个列的last name部分 
+
+               select 
+                 top 5 substring(ContactName,CHARINDEX(’ ’,ContactName)+1, len(ContactName))
+                 AS [Last Name] 
+               FROM Northwind.dbo.customers
+               
+下面是这个命令输出的结果:
+           Last Name
+           ------------------------------ 
+           Anders
+           Trujillo
+           Moreno
+           Hardy
+           Berglund
